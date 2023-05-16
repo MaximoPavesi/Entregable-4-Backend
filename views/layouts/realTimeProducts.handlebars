@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Real Time Products</title>
+</head>
+<body>
+  <h1>Real Time Products</h1>
+  <ul id="productList">
+    {{#each products}}
+    <li>{{this}}</li>
+    {{/each}}
+  </ul>
+
+  <!-- Importa la biblioteca de Socket.IO -->
+  <script src="/socket.io/socket.io.js"></script>
+
+  <!-- Código JavaScript para manejar los eventos de Socket.IO -->
+  <script>
+    // Conecta el cliente al servidor de Socket.IO
+    const socket = io();
+
+    // Escucha el evento 'productos' para actualizar la lista de productos
+    socket.on('productos', (products) => {
+      // Obtén la lista de productos y actualiza la vista
+      const productList = document.getElementById('productList');
+      productList.innerHTML = '';
+
+      products.forEach((product) => {
+        const li = document.createElement('li');
+        li.textContent = product;
+        productList.appendChild(li);
+      });
+    });
+  </script>
+</body>
+</html>

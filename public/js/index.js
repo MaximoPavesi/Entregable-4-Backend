@@ -1,4 +1,7 @@
 const socket = io()
+const express = require('express');
+const router = express.Router();
+const realTimeProductsRouter = require('./realTimeProductsRouter');
 
 socket.on("Wellcome", (data)=>{
     console.log(data)
@@ -7,6 +10,16 @@ socket.on("Wellcome", (data)=>{
 socket.on("message-all", (data)=>{
     render(data)
 })
+
+router.get('/', (req, res) => {
+  // Obtén la lista de productos (reemplaza esto con tu lógica para obtener los productos)
+  const products = obtenerListaDeProductos();
+
+  // Renderiza la vista "realTimeProducts" y pasa la lista de productos como contexto
+  res.render('realTimeProducts', { products });
+});
+
+app.use('/realtimeproducts', realTimeProductsRouter);
 
 function render(data){
     const html = data.map(elem=>{
