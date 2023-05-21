@@ -37,6 +37,43 @@ io.on("connection", (socket) => {
     }) 
 })
 
+
+// Ruta para la vista index.handlebars
+app.get('/', (req, res) => {
+    const products = obtenerProductos(); // Obtener la lista de productos desde donde sea que los almacenes
+    res.render('index', { products });
+});
+
+// Ruta para la vista realTimeProducts.handlebars
+app.get('/realtimeproducts', (req, res) => {
+    const products = obtenerProductos(); // Obtener la lista de productos desde donde sea que los almacenes
+    res.render('realTimeProducts', { products });
+});
+
+// Configurar la conexión WebSocket
+io.on('connection', (socket) => {
+    console.log('Cliente conectado');
+
+    // Escuchar eventos de agregar productos
+    socket.on('addProduct', (product) => {
+        // Agregar el producto a la lista y emitir el evento a todos los clientes conectados
+        agregarProducto(product);
+        io.emit('productAdded', product);
+    });
+
+    // Escuchar eventos de eliminar productos
+    socket.on('removeProduct', (product) => {
+        // Eliminar el producto de la lista y emitir el evento a todos los clientes conectados
+        eliminarProducto(product);
+        io.emit('productRemoved', product);
+    });
+
+    // Manejar la desconexión del cliente
+    socket.on('disconnect', () => {
+        console.log('Cliente desconectado');
+    });
+});
+
 //Public
 app.use(express.static(__dirname + "/public"))
 server.listen(PORT,()=>{

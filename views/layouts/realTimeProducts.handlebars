@@ -1,36 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Real Time Products</title>
+    <title>Productos en tiempo real</title>
 </head>
 <body>
-  <h1>Real Time Products</h1>
-  <ul id="productList">
-    {{#each products}}
-    <li>{{this}}</li>
-    {{/each}}
-  </ul>
+    <h1>Lista de Productos en tiempo real</h1>
+    <ul>
+        {{#each products}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
 
-  <!-- Importa la biblioteca de Socket.IO -->
-  <script src="/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        socket.on('productAdded', function (product) {
+            // Actualizar la lista de productos en tiempo real
+            var productItem = document.createElement("li");
+            productItem.innerText = product;
+            document.querySelector("ul").appendChild(productItem);
+        });
 
-  <!-- Código JavaScript para manejar los eventos de Socket.IO -->
-  <script>
-    // Conecta el cliente al servidor de Socket.IO
-    const socket = io();
-
-    // Escucha el evento 'productos' para actualizar la lista de productos
-    socket.on('productos', (products) => {
-      // Obtén la lista de productos y actualiza la vista
-      const productList = document.getElementById('productList');
-      productList.innerHTML = '';
-
-      products.forEach((product) => {
-        const li = document.createElement('li');
-        li.textContent = product;
-        productList.appendChild(li);
-      });
-    });
-  </script>
+        socket.on('productRemoved', function (product) {
+            // Eliminar el producto de la lista en tiempo real
+            var productItems = document.querySelectorAll("li");
+            productItems.forEach(function (item) {
+                if (item.innerText === product) {
+                    item.remove();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
