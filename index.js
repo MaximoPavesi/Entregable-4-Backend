@@ -17,6 +17,8 @@ const homeRouter = require("./router/home.router")
 const {Server} = require("socket.io")
 const io = new Server(server)
 
+const products = "./products.json"
+
 
 //Views
 app.engine("handlebars", handlebars.engine())
