@@ -13,7 +13,7 @@ socket.on("message-all", (data)=>{
 
 router.get('/', (req, res) => {
   // Obtén la lista de productos (reemplaza esto con tu lógica para obtener los productos)
-  const products = obtenerListaDeProductos();
+  const products = obtenerProductos();
 
   // Renderiza la vista "realTimeProducts" y pasa la lista de productos como contexto
   res.render('realTimeProducts', { products });
